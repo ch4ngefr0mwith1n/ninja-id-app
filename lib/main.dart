@@ -4,13 +4,22 @@ void main() {
   // runApp(const MyApp());
   runApp(MaterialApp(
     // "home" svojstvo utvrđuje šta će biti prikazano na "home" screen-u
+    // "stateful" i "stateless" widgete ubacujemo na isti način
     home: NinjaCard(),
   ));
 }
 
 // kreiraćemo "stateless" widget - koji vraća "widget tree"
 // taj "tree" će na kraju biti prikazan na našem ekranu
-class NinjaCard extends StatelessWidget {
+class NinjaCard extends StatefulWidget {
+  @override
+  State<NinjaCard> createState() => _NinjaCardState();
+}
+
+class _NinjaCardState extends State<NinjaCard> {
+  // "ninjaLevel" će biti podatak koji čuvamo:
+  int ninjaLevel = 0;
+
   @override
   Widget build(BuildContext context) {
     // "Scaffold" je widget koji nam omogućava
@@ -23,6 +32,17 @@ class NinjaCard extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.grey[850],
         elevation: 0,
+      ),
+      // ovo je dugme koje će služiti za povećavanje vrijednosti za "ninjaLevel"
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // stavljanje novog stanja i pokretanje re-builda
+          setState(() {
+            ninjaLevel += 1;
+          });
+        },
+        child: Icon(Icons.add),
+        backgroundColor: Colors.grey[800],
       ),
       // dodaćemo "padding" - tako da sadržaj ne bude "prilijepljen" uz "AppBar"
       body: Padding(
@@ -76,7 +96,7 @@ class NinjaCard extends StatelessWidget {
             // "SizedBox" služi da stvori prostor između dva widgeta
             SizedBox(height: 5.0),
             Text(
-              '8',
+              '$ninjaLevel',
               // stilizovanje teksta:
               style: TextStyle(
                   color: Colors.amberAccent[200],
@@ -109,4 +129,29 @@ class NinjaCard extends StatelessWidget {
     );
   }
 }
+
+// "Stateful" widget
+// on kreira "state" objekat sa kojim će biti povezan
+// "State" objekat će sadržati podatke i "widget" tree
+class Test extends StatefulWidget {
+  // funkcija "createState" vraća instancu klase koja se nalazi ispod:
+  @override
+  State<Test> createState() => _TestState();
+}
+
+// ova klasa zapravo predstavlja "State" objekat za "Stateful" widget iznad
+// unutar "state"-a definišemo podatke i možemo da ga mijenjamo po potrebi
+//
+// BITNO:
+// čim se izmjeni neka vrijednost ili podatak unutar "state"-a,
+// automatski će se odraditi "re-build" widget stabla
+class _TestState extends State<Test> {
+  int counter = 0;
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+
 
